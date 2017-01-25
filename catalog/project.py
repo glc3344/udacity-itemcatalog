@@ -16,8 +16,8 @@ session = DBSession()
 @app.route('/')
 @app.route('/index')
 def show_all():
-    item = session.query(Item).one()
-    return render_template('index.html', item = item)
+    user = session.query(User).one()
+    return render_template('index.html', user = user)
 
 
 
