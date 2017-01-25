@@ -20,11 +20,9 @@ class Category(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
-    """Return object data in easily serializeable format"""
-
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
             'name': self.name,
             'id': self.id,
@@ -41,11 +39,9 @@ class Item(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
-    """Return object data in easily serializeable format"""
-
     @property
     def serialize(self):
-        """Return object data in easily serializeable format"""
+        """Return object data in easily serializable format"""
         return {
             'name': self.name,
             'description': self.description,
