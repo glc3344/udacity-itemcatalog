@@ -1,0 +1,75 @@
+.wrapper {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.top-bar-title {
+    padding: 0;
+    margin: 0;
+}
+
+.top-bar {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin-bottom: 20px
+}
+
+.top-bar-right {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+strong.logo {
+    font-size: 45px;
+    text-align: center;
+    line-height: 60px;
+}
+
+button.button {
+    border-radius: 5px;
+    text-align: center;
+}
+
+#customBtn {
+    display: inline-block;
+    background: white;
+    color: #444;
+    width: 190px;
+    border-radius: 5px;
+    border: thin solid #888;
+    box-shadow: 1px 1px 1px grey;
+    white-space: nowrap;
+}
+
+#customBtn:hover {
+    cursor: pointer;
+}
+
+span.label {
+    font-family: serif;
+    font-weight: normal;
+}
+
+span.icon {
+    background: url('/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    width: 42px;
+    height: 42px;
+}
+
+span.buttonText {
+    display: inline-block;
+    vertical-align: middle;
+    padding-left: 42px;
+    padding-right: 42px;
+    font-size: 14px;
+    font-weight: bold;
+    /* Use the Roboto font that is loaded in the <head> */
+    font-family: 'Roboto', sans-serif;
+}

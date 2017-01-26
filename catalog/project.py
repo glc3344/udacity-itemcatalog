@@ -4,7 +4,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, Item
 
-
 app = Flask(__name__)
 
 engine = create_engine('sqlite:///itemcatalog.db')
@@ -13,15 +12,22 @@ Base.metadata.create_all(engine)
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+
 @app.route('/')
 @app.route('/index')
 def show_all():
     user = session.query(User).one()
-    return render_template('index.html', user = user)
+    return render_template('index.html', user=user)
 
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 
+#####################
+#  GOOGLE Sign In   #
+#####################
 
 
 

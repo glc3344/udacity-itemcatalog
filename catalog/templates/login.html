@@ -1,0 +1,53 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id"
+          content="458401153152-22gtge8j5ajft96euj2ubkk1vdtmr6sk.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/foundation.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/app.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+
+
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="wrapper">
+        <div class="top-bar-title">
+    <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
+      <button class="menu-icon dark" type="button" data-toggle></button>
+    </span>
+            <strong class="logo">Item Catalog</strong>
+        </div>
+        <div id="responsive-menu">
+            <div class="top-bar-right">
+                <ul class="menu">
+                    <li>
+                        <a href="{{ url_for('login') }}" class="button">Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+
+</div>
+
+
+<script src="../static/js/vendor/jquery.js"></script>
+<script src="../static/js/vendor/what-input.js"></script>
+<script src="../static/js/vendor/foundation.js"></script>
+<script src="../static/js/app.js"></script>
+</body>
+</html>
+
+
