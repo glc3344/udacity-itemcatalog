@@ -31,9 +31,10 @@ strong.logo {
     color: #1779ba;
 }
 
-button.button {
+.button {
     border-radius: 5px;
     text-align: center;
+    font-weight: bolder;
 }
 
 .callout.large {
@@ -43,4 +44,12 @@ button.button {
     height: 400px;
     width: 400px;
     margin-top: 100px;
+}
+
+.flash {
+    text-align: center;
+}
+
+.callout.success {
+    border-radius:5px;
 }

@@ -39,7 +39,12 @@ def showLogin():
 @app.route('/')
 @app.route('/index')
 def show_all():
-    return render_template('index.html')
+    if 'username' in login_session:
+        user_name = login_session['username']
+        picture = login_session['picture']
+        return render_template('index.html', picture=picture, user_name=user_name)
+    else:
+        return render_template('index.html')
 
 
 #####################
@@ -138,7 +143,7 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-    flash("you are now logged in as %s" % login_session['username'])
+    flash("Welcome %s!" % login_session['username'])
     print("done!")
     return output
 
@@ -196,13 +201,14 @@ def gdisconnect():
         del login_session['picture']
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        flash("You have successfully been logged out.")
+        return redirect(url_for('show_all'))
     else:
-
         response = make_response(
             json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
+
 
 
 if __name__ == '__main__':

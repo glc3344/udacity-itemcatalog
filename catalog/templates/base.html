@@ -26,7 +26,17 @@
       <div class="top-bar-right">
         <ul class="menu">
           <li>
-            <a href="{{ url_for('showLogin') }}" class="button">Login</a>
+            <div>
+              {% if 'username' not in session %}
+                <a href="{{ url_for('showLogin') }}" class="button">Login</a>
+              {% else %}
+                <a href="{{ url_for('gdisconnect') }}" class="button
+              alert">Logout {{ user_name }}
+                </a> <img src="{{ picture }}" alt="profile-pic" height="40"
+                          width="40" style="border-radius: 25px; margin-left:
+                        10px;">
+              {% endif %}
+            </div>
           </li>
         </ul>
       </div>
@@ -38,11 +48,9 @@
   <div class='flash'>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <ul>
-          {% for message in messages %}
-            <li><strong> {{ message }} </strong></li>
-          {% endfor %}
-        </ul>
+        {% for message in messages %}
+          <strong class="callout success"> {{ message }} </strong>
+        {% endfor %}
       {% endif %}
     {% endwith %}
   </div>
