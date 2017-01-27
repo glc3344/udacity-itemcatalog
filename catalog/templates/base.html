@@ -1,49 +1,32 @@
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Item Catalog</title>
-  <link rel="stylesheet" type="text/css" href="../static/css/foundation.css">
-  <link rel="stylesheet" type="text/css" href="../static/css/app.css">
-  <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
-
-
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="../static/css/foundation.css">
+  <link rel="stylesheet" href="../static/css/styles.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="//apis.google.com/js/platform.js?onload=start"></script>
 </head>
-
 <body>
 
 <div class="top-bar">
   <div class="wrapper">
     <div class="top-bar-title">
-        <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
-          <button class="menu-icon dark" type="button" data-toggle></button>
-        </span>
-      <strong class="logo">Item Catalog</strong>
+            <span data-responsive-toggle="responsive-menu"
+                  data-hide-for="medium">
+                <button class="menu-icon dark" type="button"
+                        data-toggle></button>
+             </span>
+      <a href="{{ url_for('show_all') }}"><strong class="logo">ItemCatalog</strong></a>
     </div>
     <div id="responsive-menu">
       <div class="top-bar-right">
         <ul class="menu">
           <li>
-            <a data-toggle="animatedModal10" class="button">Login</a>
-            <div class="reveal" id="animatedModal10" data-reveal
-                 data-animation-in="hinge-in-from-top"
-                 data-animation-out="slide-out-down">
-              <h1>Login Options:</h1>
-              <div class="large-6 large-centered columns">
-                <div class="button-group even-3">
-                  <a href="login/google" class="button">Google</a>
-                  <a href="login/fb" class="button">Facebook</a>
-                  <a href="login/tw" class="button">Twitter</a>
-                </div>
-              </div>
-              <button class="close-button" data-close aria-label="Close reveal"
-                      type="button">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
+            <a href="{{ url_for('showLogin') }}" class="button">Login</a>
           </li>
         </ul>
       </div>
@@ -51,10 +34,19 @@
   </div>
 </div>
 
-
 <div class="wrapper">
+  <div class='flash'>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li><strong> {{ message }} </strong></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
   {% block content %}
-
   {% endblock %}
 </div>
 
@@ -63,5 +55,4 @@
 <script src="../static/js/vendor/foundation.js"></script>
 <script src="../static/js/app.js"></script>
 </body>
-
 </html>

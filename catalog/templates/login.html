@@ -1,53 +1,58 @@
-<!doctype html>
-<html class="no-js" lang="en" dir="ltr">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id"
-          content="458401153152-22gtge8j5ajft96euj2ubkk1vdtmr6sk.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <link rel="stylesheet" type="text/css" href="../static/css/foundation.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/app.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
 
 
-</head>
-<body>
-
-<div class="top-bar">
-    <div class="wrapper">
-        <div class="top-bar-title">
-    <span data-responsive-toggle="responsive-menu" data-hide-for="medium">
-      <button class="menu-icon dark" type="button" data-toggle></button>
-    </span>
-            <strong class="logo">Item Catalog</strong>
-        </div>
-        <div id="responsive-menu">
-            <div class="top-bar-right">
-                <ul class="menu">
-                    <li>
-                        <a href="{{ url_for('login') }}" class="button">Login
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+  <div class="callout large">
+    <h3>Login Options:</h3>
+    <!-- GOOGLE PLUS SIGN IN-->
+    <div id="signInButton">
+          <span class="g-signin"
+                data-scope="openid email"
+                data-clientid="458401153152-22gtge8j5ajft96euj2ubkk1vdtmr6sk.apps.googleusercontent.com"
+                data-redirecturi="postmessage"
+                data-accesstype="offline"
+                data-cookiepolicy="single_host_origin"
+                data-callback="signInCallback"
+                data-approvalprompt="force">
+          </span>
     </div>
-</div>
+    <div id="result"></div>
+    <script>
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+                // Hide the sign-in button now that the user is authorized
+                $('#signinButton').attr('style', 'display: none');
+                // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+                $.ajax({
+                    type: 'POST',
+                    url: '/gconnect?state={{STATE}}',
+                    processData: false,
+                    data: authResult['code'],
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    success: function (result) {
+                        // Handle or verify the server response if necessary.
+                        if (result) {
+                            $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                            setTimeout(function () {
+                                window.location.href = "/index";
+                            }, 4000);
+                        } else if (authResult['error']) {
+                            console.log('There was an error: ' + authResult['error']);
+                        } else {
+                            $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+    <!--END GOOGLE PLUS SIGN IN -->
+  {{ STATE }}
+  </div>
 
-<div class="wrapper">
 
-</div>
-
-
-<script src="../static/js/vendor/jquery.js"></script>
-<script src="../static/js/vendor/what-input.js"></script>
-<script src="../static/js/vendor/foundation.js"></script>
-<script src="../static/js/app.js"></script>
-</body>
-</html>
+{% endblock %}
 
 
