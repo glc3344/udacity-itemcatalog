@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for, flash, \
     jsonify, make_response
 from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, Item
 import json, random, string
@@ -39,12 +39,54 @@ def showLogin():
 @app.route('/')
 @app.route('/index')
 def show_all():
-    if 'username' in login_session:
-        user_name = login_session['username']
-        picture = login_session['picture']
-        return render_template('index.html', picture=picture, user_name=user_name)
-    else:
+    categories = session.query(Category).order_by(asc(Category.name))
+    if 'username' not in login_session:
         return render_template('index.html')
+    else:
+        return render_template('index.html',
+                               user_name=login_session['username'],
+                               picture=login_session['picture'],
+                               categories=categories)
+
+
+@app.route('/category/new', methods=['GET', 'POST'])
+def new_category():
+    if 'username' not in login_session:
+        return redirect('/login')
+    if request.method == 'POST':
+        new_category = Category(
+            name=request.form['category_name'], user_id=login_session[
+                'user_id'])
+        session.add(new_category)
+        flash('Category %s was successfully created!' % new_category.name)
+        session.commit()
+        return redirect(url_for('show_all'))
+    else:
+        return render_template('newCategory.html', user_name=login_session[
+            'username'], picture=login_session['picture'])
+
+
+@app.route('/category/<int:category_id>/item/new', methods=['GET', 'POST'])
+def new_item(category_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    category = session.query(Category).filter_by(id=category_id).one()
+    if login_session['user_id'] != category.user_id:
+        return "<script>function myFunction() {alert('You are not authorized to add items to this category. Please create your own category in order to add items.');}</script><body onload='myFunction()''>"
+    if request.method == 'POST':
+        new_item = Item(
+            name=request.form['item_name'], description=request.form[
+                'description'], user_id=login_session['user_id'])
+        session.add(new_item)
+        session.commit()
+        flash('Item %s was successfully created!' % new_item.name)
+        return redirect(url_for('show_all'))
+    else:
+        return render_template('newItem.html',
+                               category_id=category_id,
+                               user_name=login_session[
+                                   'username'],
+                               picture=login_session['picture'])
 
 
 #####################
@@ -208,6 +250,24 @@ def gdisconnect():
             json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
+
+# Disconnect based on provider
+@app.route('/disconnect')
+def disconnect():
+    if 'provider' in login_session:
+        if login_session['provider'] == 'google':
+            gdisconnect()
+            del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+        del login_session['user_id']
+        del login_session['provider']
+        flash("You have successfully been logged out.")
+        return redirect(url_for('show_all'))
+    else:
+        flash("You were not logged in")
+        return redirect(url_for('show_all'))
 
 
 

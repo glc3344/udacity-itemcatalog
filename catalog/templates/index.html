@@ -5,7 +5,12 @@
 
 <h1>Index Page</h1>
 
+<a href="{{ url_for('new_category') }}" class="button">Create Category</a>
 
+
+  {% for c in categories %}
+  <h3>{{ c.name }}</h3>
+  {% endfor %}
 
 {% endblock %}
 
