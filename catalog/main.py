@@ -1,8 +1,16 @@
 from flask import Flask, render_template, redirect, request, url_for, flash, \
-    jsonify
+    jsonify, make_response
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, Item
+
+from flask import session as login_session
+import random, string
+
+from authomatic.adapters import WerkzeugAdapter
+from authomatic import Authomatic
+
+from config import CONFIG
 
 app = Flask(__name__)
 
@@ -12,6 +20,9 @@ Base.metadata.create_all(engine)
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# Instantiate Authomatic.
+authomatic = Authomatic(CONFIG, 'your secret string', report_errors=False)
+
 
 @app.route('/')
 @app.route('/index')
@@ -20,9 +31,17 @@ def show_all():
     return render_template('index.html', user=user)
 
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
+@app.route('/login/<provider_name>/', methods=['GET', 'POST'])
+def login(provider_name):
+    response = make_response()
+    result = authomatic.login(WerkzeugAdapter(request, response), provider_name)
+    if result:
+        if result.user:
+            result.user.update()
+        return render_template('login.html', result=result)
+    return response
+
+
 
 
 #####################
@@ -41,6 +60,5 @@ def login():
 
 
 if __name__ == '__main__':
-    app.secret_key = 'super secret key'
     app.debug = True
     app.run(host='0.0.0.0', port=5000)
