@@ -14,33 +14,33 @@
 </head>
 <body>
 
-<div class="top-bar">
-  <div class="wrapper">
-    <div class="top-bar-title">
-            <span data-responsive-toggle="responsive-menu"
-                  data-hide-for="medium">
-                <button class="menu-icon dark" type="button"
-                        data-toggle></button>
-             </span>
-      <a href="{{ url_for('show_all') }}"><strong class="logo">ItemCatalog</strong></a>
-    </div>
-    <div id="responsive-menu">
-      <div class="top-bar-right">
-        <ul class="menu">
-          <li>
-            <div>
-              {% if 'username' not in session %}
-                <a href="{{ url_for('showLogin') }}" class="button">Login</a>
-              {% else %}
-                <a href="{{ url_for('gdisconnect') }}" class="button
+<div data-sticky-container>
+  <div class="top-bar"
+       data-sticky
+       data-options="marginTop:0;"
+       style="width:100%">
+    <div class="wrapper">
+      <div class="top-bar-title">
+        <a href="{{ url_for('show_all') }}"><strong class="logo">ItemCatalog</strong></a>
+      </div>
+      <div id="responsive-menu">
+        <div class="top-bar-right">
+          <ul class="menu">
+            <li>
+              <div>
+                {% if 'username' not in session %}
+                  <a href="{{ url_for('showLogin') }}" class="button">Login</a>
+                {% else %}
+                  <a href="{{ url_for('logout') }}" class="button
               alert">Logout {{ user_name }}
-                </a> <img src="{{ picture }}" alt="profile-pic" height="40"
-                          width="40" style="border-radius: 25px; margin-left:
+                  </a> <img src="{{ picture }}" alt="profile-pic" height="40"
+                            width="40" style="border-radius: 25px; margin-left:
                         10px;">
-              {% endif %}
-            </div>
-          </li>
-        </ul>
+                {% endif %}
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

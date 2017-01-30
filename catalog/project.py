@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for, flash, \
     jsonify, make_response
 from flask import session as login_session
 from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
-from sqlalchemy import create_engine, asc
+from sqlalchemy import create_engine, asc, desc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Category, Item
 import json, random, string
@@ -40,7 +40,7 @@ def showLogin():
 @app.route('/index')
 def show_all():
     categories = session.query(Category).order_by(asc(Category.name))
-    items = session.query(Item).order_by(asc(Item.name))
+    items = session.query(Item).order_by((desc(Item.id)))
     if 'username' not in login_session:
         return render_template('index.html')
     else:
@@ -60,7 +60,7 @@ def new_category():
             name=request.form['category_name'], user_id=login_session[
                 'user_id'])
         session.add(new_category)
-        flash('Category %s was successfully created!' % new_category.name)
+        flash('Category \"%s\" was successfully created!' % new_category.name)
         session.commit()
         return redirect(url_for('show_all'))
     else:
@@ -68,16 +68,38 @@ def new_category():
             'username'], picture=login_session['picture'])
 
 
+@app.route('/category/<int:category_id>/edit/', methods=['GET', 'POST'])
+def edit_category(category_id):
+    editedCategory = session.query(
+        Category).filter_by(id=category_id).one()
+    if 'username' not in login_session:
+        return redirect('/login')
+    if editedCategory.user_id != login_session['user_id']:
+        flash(
+            "You are not authorized to edit this category. Please create your own category in order to edit")
+        return redirect(url_for('show_all'))
+    if request.method == 'POST':
+        if request.form['category_name']:
+            editedCategory.name = request.form['category_name']
+        session.add(editedCategory)
+        session.commit()
+        flash('Category successfully edited to \"%s\"' % editedCategory.name)
+        return redirect(url_for('show_all'))
+    else:
+        return render_template('editCategory.html', category=editedCategory)
+
+
 @app.route('/category/<int:category_id>/item/new', methods=['GET', 'POST'])
 def new_item(category_id):
     if 'username' not in login_session:
+        flash("You must be logged in to add an item to a category!")
         return redirect('/login')
     category = session.query(Category).filter_by(id=category_id).one()
     cat_name = category.name
-    if login_session['user_id'] != category.user_id:
-        flash('You are not allowed to add items to the %s category. Please '
-              'create your own category in order to add items.' % category.name)
-        return redirect(url_for('show_all'))
+    # if login_session['user_id'] != category.user_id:
+    #     flash('You are not allowed to add items to the %s category. Please '
+    #           'create your own category in order to add items.' % category.name)
+    #     return redirect(url_for('show_all'))
     if request.method == 'POST':
         new_item = Item(
             name=request.form['item_name'], description=request.form[
@@ -88,7 +110,7 @@ def new_item(category_id):
         flash('Item \"%s\" was successfully created!' % new_item.name)
         return redirect(url_for('show_all'))
     else:
-        return render_template('newItem.html',cat_name = cat_name,
+        return render_template('newItem.html', cat_name=cat_name,
                                category_id=category_id,
                                user_name=login_session[
                                    'username'],
@@ -185,14 +207,17 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-    flash("you are now logged in as %s" % login_session['username'])
+    flash("Welcome %s!" % login_session['username'])
     print "done!"
     return output
 
 
 # DISCONNECT - Revoke a current user's token and reset their login_session
-@app.route('/gdisconnect')
-def gdisconnect():
+@app.route('/logout')
+def logout():
+    if 'username' not in login_session:
+        flash("You must be signed in to logout")
+        return redirect('/login')
     access_token = login_session['access_token']
     print 'In gdisconnect access token is %s', access_token
     print 'User name is: '

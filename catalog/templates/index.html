@@ -3,21 +3,37 @@
 
 {% block content %}
 
-<h1>Index Page</h1>
+  <h1>Index Page</h1>
 
-<a href="{{ url_for('new_category') }}" class="button">Create Category</a>
+  <a href="{{ url_for('new_category') }}" class="button">Create Category</a>
 
 
   {% for c in categories %}
-  <h3>{{ c.name }} {{ c.id }}</h3>
+    <h3>
+      <a href="{{ url_for('new_item', category_id = c.id ) }}">{{ c.name
+              }}</a>
+      {% if c.user.name == user_name %}
+        <br>
+        <a href="{{ url_for('edit_category', category_id = c.id) }}"
+           class="button tiny">Edit</a>
+      {% endif %}
+    </h3>
   {% endfor %}
+  <br>
+  <br>
+  <br>
+  <br><br>
+  <br><br>
+  <br><br>
+  <br><br>
+  <br><br>
+  <br><br>
+  <br>
 
-  <br>
-  <br>
-  <br>
-
-{% for i in items %}
-  <h5>{{ i.name }} ({{ i.id }}) ({{ i.category.name}})</h5>
+  {% for i in items %}
+    <h5>
+      {{ i.name }}
+    </h5>
   {% endfor %}
 
 {% endblock %}
