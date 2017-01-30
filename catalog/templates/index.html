@@ -9,9 +9,18 @@
 
 
   {% for c in categories %}
-  <h3>{{ c.name }}</h3>
+  <h3>{{ c.name }} {{ c.id }}</h3>
+  {% endfor %}
+
+  <br>
+  <br>
+  <br>
+
+{% for i in items %}
+  <h5>{{ i.name }} ({{ i.id }}) ({{ i.category.name}})</h5>
   {% endfor %}
 
 {% endblock %}
+
 
 

@@ -37,6 +37,11 @@ strong.logo {
     font-weight: bolder;
 }
 
+.flash {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
 .callout.large {
     position: relative;
     margin: 0 auto;
@@ -44,10 +49,6 @@ strong.logo {
     height: 400px;
     width: 400px;
     margin-top: 100px;
-}
-
-.flash {
-    text-align: center;
 }
 
 .callout.success {

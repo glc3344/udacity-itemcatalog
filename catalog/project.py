@@ -40,13 +40,15 @@ def showLogin():
 @app.route('/index')
 def show_all():
     categories = session.query(Category).order_by(asc(Category.name))
+    items = session.query(Item).order_by(asc(Item.name))
     if 'username' not in login_session:
         return render_template('index.html')
     else:
         return render_template('index.html',
                                user_name=login_session['username'],
                                picture=login_session['picture'],
-                               categories=categories)
+                               categories=categories,
+                               items=items)
 
 
 @app.route('/category/new', methods=['GET', 'POST'])
@@ -71,18 +73,22 @@ def new_item(category_id):
     if 'username' not in login_session:
         return redirect('/login')
     category = session.query(Category).filter_by(id=category_id).one()
+    cat_name = category.name
     if login_session['user_id'] != category.user_id:
-        return "<script>function myFunction() {alert('You are not authorized to add items to this category. Please create your own category in order to add items.');}</script><body onload='myFunction()''>"
+        flash('You are not allowed to add items to the %s category. Please '
+              'create your own category in order to add items.' % category.name)
+        return redirect(url_for('show_all'))
     if request.method == 'POST':
         new_item = Item(
             name=request.form['item_name'], description=request.form[
-                'description'], user_id=login_session['user_id'])
+                'description'], category_id=category_id, user_id=login_session[
+                'user_id'])
         session.add(new_item)
         session.commit()
-        flash('Item %s was successfully created!' % new_item.name)
+        flash('Item \"%s\" was successfully created!' % new_item.name)
         return redirect(url_for('show_all'))
     else:
-        return render_template('newItem.html',
+        return render_template('newItem.html',cat_name = cat_name,
                                category_id=category_id,
                                user_name=login_session[
                                    'username'],
