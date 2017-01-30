@@ -32,7 +32,7 @@
               {% if 'username' not in session %}
                 <a href="{{ url_for('showLogin') }}" class="button">Login</a>
               {% else %}
-                <a href="{{ url_for('disconnect') }}" class="button
+                <a href="{{ url_for('gdisconnect') }}" class="button
               alert">Logout {{ user_name }}
                 </a> <img src="{{ picture }}" alt="profile-pic" height="40"
                           width="40" style="border-radius: 25px; margin-left:
