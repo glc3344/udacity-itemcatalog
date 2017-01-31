@@ -95,8 +95,10 @@ def edit_category(category_id):
         flash('Category successfully edited to \"%s\"' % editedCategory.name)
         return redirect(url_for('show_all'))
     else:
-        return render_template('editCategory.html', category=editedCategory, user_name=login_session[
-            'username'], picture=login_session['picture'])
+        return render_template('editCategory.html', category=editedCategory,
+                               user_name=login_session[
+                                   'username'],
+                               picture=login_session['picture'])
 
 
 @app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
@@ -125,26 +127,36 @@ def new_item(category_id):
         flash("You must be logged in to add an item to a category!")
         return redirect('/login')
     category = session.query(Category).filter_by(id=category_id).one()
-    cat_name = category.name
     # if login_session['user_id'] != category.user_id:
     #     flash('You are not allowed to add items to the %s category. Please '
     #           'create your own category in order to add items.' % category.name)
     #     return redirect(url_for('show_all'))
     if request.method == 'POST':
-        new_item = Item(
-            name=request.form['item_name'], description=request.form[
-                'description'], category_id=category_id, user_id=login_session[
-                'user_id'])
+        new_item = Item(name=request.form['item_name'],
+                        description=request.form[
+                            'description'], category_id=category_id,
+                        user_id=login_session[
+                            'user_id'])
         session.add(new_item)
         session.commit()
         flash('Item \"%s\" was successfully created!' % new_item.name)
         return redirect(url_for('show_all'))
     else:
-        return render_template('newItem.html', cat_name=cat_name,
+        return render_template('newItem.html', cat_name=category.name,
                                category_id=category_id,
                                user_name=login_session[
                                    'username'],
                                picture=login_session['picture'])
+
+
+@app.route('/category/<category_name>/<item_name>')
+def item_description(category_name, item_name):
+    item = session.query(Item).filter_by(name=item_name).one()
+    category = session.query(Category).filter_by(name=category_name).one()
+    return render_template('itemDescription.html', item=item,
+                           category=category, user_name=login_session[
+            'username'],
+                           picture=login_session['picture'])
 
 
 #####################

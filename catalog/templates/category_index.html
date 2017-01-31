@@ -1,18 +1,38 @@
 {% extends "base.html" %}
-{% block title %}Home Page{% endblock %}
+{% block title %}{{ category.name }} Items{% endblock %}
 
 {% block content %}
 
-  <h1>{{ category.name }} Items</h1>
+  <div class="row">
+    <div class="medium-6 columns">
+      <h1>{{ category.name }} Items</h1>
+    </div>
+  </div>
 
-  <a href="{{ url_for('new_item', category_id = category.id) }}"
-     class="button">Add Item</a>
+  <div class="row">
+    <div class="medium-6 columns">
+      {% if category.user.name == user_name %}
+        <a href="{{ url_for('edit_category', category_id = category.id) }}"
+           class="button secondary">Edit/Delete Category Name</a>
+        </div>
+        </div>
+      {% endif %}
 
+  <div class="row">
+    <div class="medium-6 columns">
+      <a href="{{ url_for('new_item', category_id = category.id) }}"
+         class="button">Add Item</a>
+    </div>
+  </div>
 
-  {% for i in items %}
-    <h5>
-      {{ i.name }}
-    </h5>
-  {% endfor %}
+  <div class="row">
+    <div class="medium-6 columns">
+      {% for i in items %}
+        <h5>
+          {{ i.name }}
+        </h5>
+      {% endfor %}
+    </div>
+  </div>
 
 {% endblock %}

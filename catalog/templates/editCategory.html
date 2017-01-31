@@ -3,26 +3,36 @@
 
 {% block content %}
   <div class="row">
+    <div class="medium-6 columns">
+      <h1>Edit Category</h1>
+    </div>
+  </div>
+
+  <form action="#" method="post">
     <div class="row">
       <div class="medium-6 columns">
-        <h1>Edit Category</h1>
+        <label for="name">Name:
+          <input type="text" placeholder="{{ category.name }}"
+                 name="category_name">
+        </label>
       </div>
     </div>
 
-    <form action="#" method="post">
-      <div class="row">
-        <div class="medium-6 columns">
-          <label for="name">Name:
-            <input type="text" placeholder="{{ category.name }}"
-                   name="category_name">
-          </label>
-          <div class="input-group-button">
-            <input type="submit" class="button" value="Submit" id="submit">
-          </div>
-        </div>
+    <div class="row">
+      <div class="medium-6 columns">
+          <input type="submit" class="button" value="Submit" id="submit">
       </div>
-    </form>
-  </div>
+    </div>
+
+
+    <div class="row">
+      <div class="medium-6 columns">
+        <a href="{{ url_for('delete_category', category_id=category.id) }}"
+           class="button
+          alert">Delete Category?</a>
+      </div>
+    </div>
+  </form>
 
 {% endblock %}
 
