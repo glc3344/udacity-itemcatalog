@@ -16,6 +16,16 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="medium-6 columns">
+      {% if item.user.name == user_name %}
+        <a href="{{ url_for('edit_item', item_name = item.name,
+        category_name=category.name) }}"
+           class="button secondary">Edit/Delete Item</a>
+        </div>
+        </div>
+      {% endif %}
+
 
 
 

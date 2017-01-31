@@ -159,6 +159,32 @@ def item_description(category_name, item_name):
                            picture=login_session['picture'])
 
 
+@app.route('/category/<category_name>/<item_name>/edit', methods=['GET', 'POST'])
+def edit_item(category_name, item_name):
+    if 'username' not in login_session:
+        return redirect('/login')
+    editedItem = session.query(Item).filter_by(name=item_name).one()
+    category = session.query(Category).filter_by(name=category_name).one()
+    if login_session['user_id'] != category.user_id:
+        flash( "You are not authorized to edit \"%s\"" % editedItem.name)
+        return redirect(url_for('show_all'))
+    if request.method == 'POST':
+        if request.form['item_name']:
+            editedItem.name = request.form['item_name']
+        if request.form['description']:
+            editedItem.description = request.form['description']
+        session.add(editedItem)
+        session.commit()
+        flash("\"%s\" Successfully Edited" % editedItem.name)
+        return redirect(url_for('category_index', category_name=
+                                category_name))
+    else:
+        return render_template('editItem.html', category_name=category_name,
+                               item=editedItem, user_name=login_session[
+                                   'username'],
+                               picture=login_session['picture'])
+
+
 #####################
 #  GOOGLE Sign In   #
 #####################
