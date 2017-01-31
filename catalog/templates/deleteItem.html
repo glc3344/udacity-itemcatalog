@@ -17,7 +17,10 @@
         <div class="medium-6 columns">
           <div class="button-group">
             <input type="submit" class="button alert" value="Delete" id="submit">
-            <a href="{{ url_for('show_all') }}" class="button secondary">Cancel</a>
+            <a href="{{ url_for('category_index', category_name=category_name)
+                    }}"
+               class="button
+            secondary">Cancel</a>
           </div>
         </div>
       </div>
