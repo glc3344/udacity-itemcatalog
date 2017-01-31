@@ -21,16 +21,18 @@
   <div class="row">
     <div class="medium-6 columns">
       <a href="{{ url_for('new_item', category_id = category.id) }}"
-         class="button">Add Item</a>
+         class="button">Add Item to {{ category.name }}</a>
     </div>
   </div>
 
   <div class="row">
     <div class="medium-6 columns">
       {% for i in items %}
-        <h5>
-          {{ i.name }}
-        </h5>
+        <h3>
+        <a href="{{ url_for('item_description',
+          item_name = i.name, category_name = i.category.name) }}">
+            {{ i.name }}</a>
+        </h3>
       {% endfor %}
     </div>
   </div>

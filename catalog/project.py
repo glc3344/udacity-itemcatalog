@@ -164,8 +164,7 @@ def edit_item(category_name, item_name):
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(Item).filter_by(name=item_name).one()
-    category = session.query(Category).filter_by(name=category_name).one()
-    if login_session['user_id'] != category.user_id:
+    if login_session['user_id'] != editedItem.user_id:
         flash( "You are not authorized to edit \"%s\"" % editedItem.name)
         return redirect(url_for('show_all'))
     if request.method == 'POST':
@@ -184,6 +183,27 @@ def edit_item(category_name, item_name):
                                    'username'],
                                picture=login_session['picture'])
 
+@app.route('/category/<category_name>/<item_name>/delete',
+           methods=['GET', 'POST'])
+def delete_item(category_name, item_name):
+    if 'username' not in login_session:
+        return redirect('/login')
+    deleteItem = session.query(Item).filter_by(name=item_name).one()
+    if login_session['user_id'] != deleteItem.user_id:
+        flash("You are not authorized to delete \"%s\"" % deleteItem.name)
+        return redirect(url_for('show_all'))
+    if request.method == 'POST':
+        session.delete(deleteItem)
+        session.commit()
+        flash("\"%s\" Successfully Deleted!" % deleteItem.name)
+        return redirect(url_for('category_index', category_name=
+        category_name))
+    else:
+        return render_template('deleteItem.html', item_name=deleteItem,
+                               category_name=category_name,
+                               user_name=login_session[
+                                'username'],
+                               picture=login_session['picture'])
 
 #####################
 #  GOOGLE Sign In   #

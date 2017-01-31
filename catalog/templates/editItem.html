@@ -17,18 +17,36 @@
         </label>
       </div>
     </div>
+
     <div class="row">
       <div class="medium-6 columns">
         <label for="description">
           Update description of the item:
-          <textarea name="description" rows="8">{{ item.description }}</textarea>
+          <textarea name="description"
+                    rows="8">{{ item.description }}
+          </textarea>
         </label>
-        <div class="input-group-button">
-          <input type="submit" class="button" value="Submit" id="submit">
-        </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="medium-6 columns">
+        <input type="submit" class="button" value="Submit" id="submit">
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="medium-6 columns">
+        <a href="{{ url_for('delete_item', category_name=category_name,
+        item_name=item.name ) }}" class="button alert">Delete
+                                                                     Item?</a>
+      </div>
+    </div>
+
   </form>
+
+
 
 
 {% endblock %}

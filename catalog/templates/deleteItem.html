@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Delete Category{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="row">
+      <div class="medium-6 columns">
+        <h1>Delete {{ item_name.name }}</h1>
+      </div>
+    </div>
+
+    <div class="row">
+    <div class="medium-6 columns">
+    <form action="#" method="post">
+      <div class="row">
+        <div class="medium-6 columns">
+          <div class="button-group">
+            <input type="submit" class="button alert" value="Delete" id="submit">
+            <a href="{{ url_for('show_all') }}" class="button secondary">Cancel</a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+    </div>
+  </div>
+
+{% endblock %}
