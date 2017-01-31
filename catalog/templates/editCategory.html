@@ -2,22 +2,27 @@
 {% block title %}Edit Category{% endblock %}
 
 {% block content %}
-
-  <h1>Edit Category</h1>
-
-  <form action="#" method="post">
+  <div class="row">
     <div class="row">
       <div class="medium-6 columns">
-        <label for="name">Name:
-          <input type="text" placeholder="{{ category.name }}"
-                 name="category_name">
-        </label>
-        <div class="input-group-button">
-          <input type="submit" class="button" value="Submit" id="submit">
-        </div>
+        <h1>Edit Category</h1>
       </div>
     </div>
-  </form>
+
+    <form action="#" method="post">
+      <div class="row">
+        <div class="medium-6 columns">
+          <label for="name">Name:
+            <input type="text" placeholder="{{ category.name }}"
+                   name="category_name">
+          </label>
+          <div class="input-group-button">
+            <input type="submit" class="button" value="Submit" id="submit">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 
 {% endblock %}
 

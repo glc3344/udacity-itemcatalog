@@ -51,6 +51,15 @@ def show_all():
                                items=items)
 
 
+@app.route('/category/<category_name>/items')
+def category_index(category_name):
+    category = session.query(Category).filter_by(name=category_name).one()
+    items = session.query(Item).filter_by(category=category).all()
+    return render_template('category_index.html', category=category,
+                           items=items, user_name=login_session[
+            'username'], picture=login_session['picture'])
+
+
 @app.route('/category/new', methods=['GET', 'POST'])
 def new_category():
     if 'username' not in login_session:
@@ -86,7 +95,28 @@ def edit_category(category_id):
         flash('Category successfully edited to \"%s\"' % editedCategory.name)
         return redirect(url_for('show_all'))
     else:
-        return render_template('editCategory.html', category=editedCategory)
+        return render_template('editCategory.html', category=editedCategory, user_name=login_session[
+            'username'], picture=login_session['picture'])
+
+
+@app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
+def delete_category(category_id):
+    delete_category = session.query(
+        Category).filter_by(id=category_id).one()
+    if 'username' not in login_session:
+        return redirect('/login')
+    if delete_category.user_id != login_session['user_id']:
+        flash(
+            "You are not authorized to delete this category. Please create your own category in order to edit")
+        return redirect(url_for('show_all'))
+    if request.method == 'POST':
+        session.delete(delete_category)
+        session.commit()
+        flash('Category \"%s\" was successfully deleted!' %
+              delete_category.name)
+        return redirect(url_for('show_all'))
+    else:
+        return render_template('deleteCategory.html', category=delete_category)
 
 
 @app.route('/category/<int:category_id>/item/new', methods=['GET', 'POST'])

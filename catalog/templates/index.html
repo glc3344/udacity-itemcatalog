@@ -10,13 +10,19 @@
 
   {% for c in categories %}
     <h3>
-      <a href="{{ url_for('new_item', category_id = c.id ) }}">{{ c.name
-              }}</a>
-      {% if c.user.name == user_name %}
-        <br>
-        <a href="{{ url_for('edit_category', category_id = c.id) }}"
-           class="button tiny">Edit</a>
-      {% endif %}
+    <a href="{{ url_for('category_index', category_name = c.name)}}">
+      {{ c.name }}</a>
+
+
+
+
+{#      <a href="{{ url_for('new_item', category_id = c.id ) }}">{{ c.name#}
+{#              }}</a>#}
+{#      {% if c.user.name == user_name %}#}
+{#        <br>#}
+{#        <a href="{{ url_for('edit_category', category_id = c.id) }}"#}
+{#           class="button tiny">Edit</a>#}
+{#      {% endif %}#}
     </h3>
   {% endfor %}
   <br>
