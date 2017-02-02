@@ -33,7 +33,7 @@ def login_required(f):
         if 'email' in login_session:
             return f(*args, **kwargs)
         else:
-            flash("You are need to be logged in or authorized.")
+            flash("You need to be logged in or authorized.")
             return redirect('/login')
 
     return decorated_function
