@@ -37,6 +37,7 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+# Index page showing all categories and recently added items
 @app.route('/')
 @app.route('/index')
 def show_all():
@@ -53,6 +54,7 @@ def show_all():
                                items=items)
 
 
+# Displays individual category page with category specific items
 @app.route('/category/<category_name>/items')
 def category_index(category_name):
     """Lists all items of the specified category."""
@@ -63,6 +65,7 @@ def category_index(category_name):
             'username'], picture=login_session['picture'])
 
 
+# Allows logged in user to create new category
 @app.route('/category/new', methods=['GET', 'POST'])
 def new_category():
     """Create a new category."""
@@ -81,6 +84,7 @@ def new_category():
             'username'], picture=login_session['picture'])
 
 
+# Allows category owner to edit category name
 @app.route('/category/<category_name>/edit/', methods=['GET', 'POST'])
 def edit_category(category_name):
     """Edit category with specified name."""
@@ -106,6 +110,7 @@ def edit_category(category_name):
                                picture=login_session['picture'])
 
 
+# Allows category owner to delete category along with all of its current items
 @app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
 def delete_category(category_id):
     """Edit category with specified ID."""
@@ -135,6 +140,7 @@ def delete_category(category_id):
                                picture=login_session['picture'])
 
 
+# Allows a logged in user to add a new item to specific category
 @app.route('/category/<int:category_id>/item/new', methods=['GET', 'POST'])
 def new_item(category_id):
     """Creates a new item."""
@@ -160,6 +166,7 @@ def new_item(category_id):
                                picture=login_session['picture'])
 
 
+# Displays detailed information about the specific item
 @app.route('/category/<category_name>/<item_name>')
 def item_description(category_name, item_name):
     """Shows the details of the specified item."""
@@ -171,6 +178,7 @@ def item_description(category_name, item_name):
                            picture=login_session['picture'])
 
 
+# Allows item creator to edit items properties
 @app.route('/category/<category_name>/<item_name>/edit',
            methods=['GET', 'POST'])
 def edit_item(category_name, item_name):
@@ -198,6 +206,7 @@ def edit_item(category_name, item_name):
                                picture=login_session['picture'])
 
 
+# Allows item creator to delete their item from the DB
 @app.route('/category/<category_name>/<item_name>/delete',
            methods=['GET', 'POST'])
 def delete_item(category_name, item_name):
