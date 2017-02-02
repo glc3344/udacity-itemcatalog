@@ -1,3 +1,5 @@
+from functools import wraps
+
 import httplib2
 import requests
 from flask import Flask, render_template, redirect, request, url_for, flash, \
@@ -22,6 +24,19 @@ Base.metadata.create_all(engine)
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
+# Login Helper Function
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'email' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash("You are need to be logged in or authorized.")
+            return redirect('/login')
+
+    return decorated_function
 
 
 #### Handlers
@@ -67,10 +82,9 @@ def category_index(category_name):
 
 # Allows logged in user to create new category
 @app.route('/category/new', methods=['GET', 'POST'])
+@login_required
 def new_category():
     """Create a new category."""
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         new_category = Category(
             name=request.form['category_name'], user_id=login_session[
@@ -86,12 +100,11 @@ def new_category():
 
 # Allows category owner to edit category name
 @app.route('/category/<category_name>/edit/', methods=['GET', 'POST'])
+@login_required
 def edit_category(category_name):
     """Edit category with specified name."""
     editedCategory = session.query(
         Category).filter_by(name=category_name).one()
-    if 'username' not in login_session:
-        return redirect('/login')
     if editedCategory.user_id != login_session['user_id']:
         flash(
             "You are not authorized to edit this category. Please create your own category in order to edit")
@@ -112,13 +125,12 @@ def edit_category(category_name):
 
 # Allows category owner to delete category along with all of its current items
 @app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
+@login_required
 def delete_category(category_id):
     """Edit category with specified ID."""
     delete_items = session.query(Item).filter_by(category_id=category_id).all()
     delete_category = session.query(
         Category).filter_by(id=category_id).one()
-    if 'username' not in login_session:
-        return redirect('/login')
     if delete_category.user_id != login_session['user_id']:
         flash(
             "You are not authorized to delete this category. Please create "
@@ -142,11 +154,9 @@ def delete_category(category_id):
 
 # Allows a logged in user to add a new item to specific category
 @app.route('/category/<int:category_id>/item/new', methods=['GET', 'POST'])
+@login_required
 def new_item(category_id):
     """Creates a new item."""
-    if 'username' not in login_session:
-        flash("You must be logged in to add an item to a category!")
-        return redirect('/login')
     category = session.query(Category).filter_by(id=category_id).one()
     if request.method == 'POST':
         new_item = Item(name=request.form['item_name'],
@@ -181,10 +191,9 @@ def item_description(category_name, item_name):
 # Allows item creator to edit items properties
 @app.route('/category/<category_name>/<item_name>/edit',
            methods=['GET', 'POST'])
+@login_required
 def edit_item(category_name, item_name):
     """Edit the item with the given name."""
-    if 'username' not in login_session:
-        return redirect('/login')
     editedItem = session.query(Item).filter_by(name=item_name).one()
     if login_session['user_id'] != editedItem.user_id:
         flash("You are not authorized to edit \"%s\"" % editedItem.name)
@@ -209,10 +218,9 @@ def edit_item(category_name, item_name):
 # Allows item creator to delete their item from the DB
 @app.route('/category/<category_name>/<item_name>/delete',
            methods=['GET', 'POST'])
+@login_required
 def delete_item(category_name, item_name):
     """Delete the item with the given name."""
-    if 'username' not in login_session:
-        return redirect('/login')
     deleteItem = session.query(Item).filter_by(name=item_name).one()
     if login_session['user_id'] != deleteItem.user_id:
         flash("You are not authorized to delete \"%s\"" % deleteItem.name)
@@ -237,10 +245,17 @@ def delete_item(category_name, item_name):
 
 @app.route('/category/<category_name>/JSON')
 def categoryJSON(category_name):
-    """Returns the catalog in JSON notation."""
+    """Returns the category in JSON notation."""
     category = session.query(Category).filter_by(name=category_name).one()
     items = session.query(Item).filter_by(category=category).all()
     return jsonify(Items=[i.serialize for i in items])
+
+
+@app.route('/category/<category_name>/<item_id>/JSON')
+def itemJSON(category_name, item_id):
+    """Returns an item in JSON notation."""
+    item = session.query(Item).filter_by(id=item_id).one()
+    return jsonify(Item=item.serialize)
 
 
 #####################
@@ -293,7 +308,7 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
+        print("Token's client ID does not match app's.")
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -335,7 +350,7 @@ def gconnect():
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
     flash("Welcome %s!" % login_session['username'])
-    print "done!"
+    print("done!")
     return output
 
 
@@ -346,11 +361,11 @@ def logout():
         flash("You must be signed in to logout")
         return redirect('/login')
     access_token = login_session['access_token']
-    print 'In gdisconnect access token is %s', access_token
-    print 'User name is: '
-    print login_session['username']
+    print('In gdisconnect access token is %s', access_token)
+    print('User name is: ')
+    print(login_session['username'])
     if access_token is None:
-        print 'Access Token is None'
+        print('Access Token is None')
         response = make_response(json.dumps('Current user not connected.'),
                                  401)
         response.headers['Content-Type'] = 'application/json'
@@ -359,8 +374,8 @@ def logout():
           login_session['access_token']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print 'result is '
-    print result
+    print('result is ')
+    print(result)
     if result['status'] == '200':
         del login_session['access_token']
         del login_session['gplus_id']
