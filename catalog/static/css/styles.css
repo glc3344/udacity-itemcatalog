@@ -1,6 +1,55 @@
+body,
+.site-container::before {
+    background-image: url("../img/background.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1, h2, h3, h4, h5, label {
+    font-family: 'Roboto', sans-serif;
+    /*color: #1779ba;*/
+    color: ghostwhite;
+}
+
+p {
+    color: ghostwhite;
+}
+
 .wrapper {
     width: 90%;
     max-width: 1100px;
+    margin: 0 auto;
+}
+
+.site-container {
+    margin: 10px auto;
+    position: relative;
+    padding: 10px 5px;
+    background: hsla(0, 0%, 100%, .1);
+    line-height: 1.5;
+    border-radius: 10px;
+    box-shadow: 0 0 40px #16181e;
+    overflow: hidden;
+    margin-left: 14px;
+
+}
+
+.site-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    filter: blur(15px);
+    z-index: -1;
+}
+
+.login-container {
+    width: 25%;
+    padding: 25px;
     margin: 0 auto;
 }
 
@@ -14,7 +63,8 @@
     display: flex;
     align-items: center;
     padding: 0;
-    margin-bottom: 20px
+    background-color: #2D313D;
+    box-shadow: 0 0 40px #16181e;
 }
 
 .top-bar-right {
@@ -22,14 +72,16 @@
     display: flex;
     align-items: center;
     padding: 0;
+    background-color: #2D313D;
 }
 
 strong.logo {
-    font-size: 45px;
     text-align: center;
     line-height: 60px;
     color: #1779ba;
     padding-left: 14px;
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 300%;
 }
 
 .button {
@@ -38,9 +90,18 @@ strong.logo {
     font-weight: bolder;
 }
 
+.create {
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bolder;
+    box-shadow: 0 0 40px #16181e;
+    margin-bottom: 0;
+}
+
 .flash {
     text-align: center;
     margin-bottom: 20px;
+    border-radius: 5px;
 }
 
 .callout.large {
@@ -52,6 +113,35 @@ strong.logo {
     margin-top: 100px;
 }
 
-.callout.success {
-    border-radius:5px;
+.callout.primary {
+    border-radius: 5px;
+    background-color: hsla(0, 0%, 100%, .2);
+    color: ghostwhite;
+    border-color: ghostwhite;
+    border-width: medium;
+    font-weight: bold;
+}
+
+.login-bg {
+    background-color: #2D313D;
+}
+
+a {
+    color: ghostwhite;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+a:hover {
+    color: silver;
+}
+
+textarea, input[type="text"] {
+    color: #6F7072;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+}
+
+.parent-div {
+    margin-bottom: 70px;
 }

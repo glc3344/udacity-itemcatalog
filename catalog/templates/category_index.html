@@ -3,37 +3,42 @@
 
 {% block content %}
 
-  <div class="row">
-    <div class="medium-6 columns">
-      <h1>{{ category.name }} Items</h1>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="medium-6 columns">
-      {% if category.user.name == user_name %}
-        <a href="{{ url_for('edit_category', category_id = category.id) }}"
-           class="button secondary">Edit/Delete Category Name</a>
+  <div class="site-container">
+    <div class="site-content">
+      <div class="row">
+        <div class="medium-6 columns">
+          <h1>{{ category.name }} Items</h1>
         </div>
+      </div>
+
+      <div class="row">
+        <div class="medium-6 columns">
+          {% if category.user.name == user_name %}
+            <a href="{{ url_for('edit_category', category_name = category.name)
+                    }}"
+               class="button secondary">Edit/Delete Category Name</a>
+            </div>
+            </div>
+          {% endif %}
+
+      <div class="row">
+        <div class="medium-6 columns">
+          <a href="{{ url_for('new_item', category_id = category.id) }}"
+             class="button">Add Item to {{ category.name }}</a>
         </div>
-      {% endif %}
+      </div>
 
-  <div class="row">
-    <div class="medium-6 columns">
-      <a href="{{ url_for('new_item', category_id = category.id) }}"
-         class="button">Add Item to {{ category.name }}</a>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="medium-6 columns">
-      {% for i in items %}
-        <h3>
-        <a href="{{ url_for('item_description',
+      <div class="row">
+        <div class="medium-6 columns">
+          {% for i in items %}
+            <h3>
+              <a href="{{ url_for('item_description',
           item_name = i.name, category_name = i.category.name) }}">
-            {{ i.name }}</a>
-        </h3>
-      {% endfor %}
+                {{ i.name }}</a>
+            </h3>
+          {% endfor %}
+        </div>
+      </div>
     </div>
   </div>
 

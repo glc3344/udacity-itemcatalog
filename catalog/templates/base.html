@@ -11,58 +11,66 @@
   filename='css/styles.css') }}">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
   <script src="//apis.google.com/js/platform.js?onload=start"></script>
+  <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah|Roboto:400,700,900"
+        rel="stylesheet">
 </head>
 <body>
-
-<div data-sticky-container>
-  <div class="top-bar"
-       data-sticky
-       data-options="marginTop:0;"
-       style="width:100%">
-    <div class="wrapper">
-      <div class="top-bar-title">
-        <a href="{{ url_for('show_all') }}"><strong class="logo">ItemCatalog</strong></a>
-      </div>
-      <div id="responsive-menu">
-        <div class="top-bar-right">
-          <ul class="menu">
-            <li>
-              <div>
-                {% if 'username' not in session %}
-                  <a href="{{ url_for('showLogin') }}" class="button">Login</a>
-                {% else %}
-                  <a href="{{ url_for('logout') }}" class="button
+<div class="img-bg">
+  <div class="parent-div">
+    <div data-sticky-container>
+      <div class="top-bar"
+           data-sticky
+           data-options="marginTop:0;"
+           style="width:100%">
+        <div class="wrapper">
+          <div class="top-bar-title">
+            <a href="{{ url_for('show_all') }}"><strong class="logo">ItemCatalog</strong></a>
+          </div>
+          <div id="responsive-menu">
+            <div class="top-bar-right">
+              <ul class="menu">
+                <li>
+                  <div class="login-bg">
+                    {% if 'username' not in session %}
+                      <a href="{{ url_for('showLogin') }}"
+                         class="button">Login</a>
+                    {% else %}
+                      <a href="{{ url_for('logout') }}" class="button
               alert">Logout {{ user_name }}
-                  </a> <img src="{{ picture }}" alt="profile-pic" height="40"
-                            width="40" style="border-radius: 25px; margin-left:
+                      </a>
+                      <img src="{{ picture }}" alt="profile-pic" height="40"
+                           width="40" style="border-radius: 25px; margin-left:
                         10px;">
-                {% endif %}
-              </div>
-            </li>
-          </ul>
+                    {% endif %}
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="wrapper">
-  <div class='flash'>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <strong class="callout success"> {{ message }} </strong>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+  <div class="wrapper">
+    <div class='flash'>
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <strong class="callout primary"> {{ message }} </strong>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+    {% block content %}
+    {% endblock %}
   </div>
-  {% block content %}
-  {% endblock %}
+
+  <script src="../static/js/vendor/jquery.js"></script>
+  <script src="../static/js/vendor/what-input.js"></script>
+  <script src="../static/js/vendor/foundation.js"></script>
+  <script src="../static/js/app.js"></script>
 </div>
 
-<script src="../static/js/vendor/jquery.js"></script>
-<script src="../static/js/vendor/what-input.js"></script>
-<script src="../static/js/vendor/foundation.js"></script>
-<script src="../static/js/app.js"></script>
 </body>
 </html>

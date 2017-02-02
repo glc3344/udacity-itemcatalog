@@ -2,50 +2,53 @@
 {% block title %}Add New Item{% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="medium-6 columns">
-      <h1>Edit {{ item.name }} Item:</h1>
+
+  <div class="site-container">
+    <div class="site-content">
+      <div class="row">
+        <div class="medium-6 columns">
+          <h1>Edit {{ item.name }} Item:</h1>
+        </div>
+      </div>
+
+
+      <form action="#" method="post">
+        <div class="row">
+          <div class="medium-6 columns">
+            <label for="name">Update Item Name:
+              <input type="text" name="item_name" value="{{ item.name }}">
+            </label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="medium-6 columns">
+            <label for="description">
+              Update description of the item:
+              <textarea name="description"
+                        rows="8">{{ item.description }}
+          </textarea>
+            </label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="medium-6 columns">
+            <input type="submit" class="button" value="Submit" id="submit">
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="medium-6 columns">
+            <a href="{{ url_for('delete_item', category_name=category_name,
+        item_name=item.name ) }}" class="button alert">Delete
+                                                       Item?</a>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
-
-
-  <form action="#" method="post">
-    <div class="row">
-      <div class="medium-6 columns">
-        <label for="name">Update Item Name:
-          <input type="text" name="item_name" value="{{ item.name }}">
-        </label>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="medium-6 columns">
-        <label for="description">
-          Update description of the item:
-          <textarea name="description"
-                    rows="8">{{ item.description }}
-          </textarea>
-        </label>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="medium-6 columns">
-        <input type="submit" class="button" value="Submit" id="submit">
-      </div>
-    </div>
-
-
-    <div class="row">
-      <div class="medium-6 columns">
-        <a href="{{ url_for('delete_item', category_name=category_name,
-        item_name=item.name ) }}" class="button alert">Delete
-                                                                     Item?</a>
-      </div>
-    </div>
-
-  </form>
-
 
 
 

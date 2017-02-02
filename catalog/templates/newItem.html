@@ -3,29 +3,32 @@
 
 {% block content %}
 
-  <h1>Add Item to {{ cat_name }}</h1>
-  <form action="#" method="post">
-    <div class="row">
-      <div class="medium-6 columns">
-        <label for="name">Item Name:
-          <input type="text" placeholder="Enter text....."
-                 name="item_name">
-        </label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="medium-6 columns">
-        <label for="description">
-          Enter description of the item:
-          <textarea placeholder="Enter text....."
-                    name="description" rows="4"></textarea>
-        </label>
-        <div class="input-group-button">
-          <input type="submit" class="button" value="Submit" id="submit">
+  <div class="site-container">
+    <div class="site-content">
+      <h1>Add Item to {{ cat_name }}</h1>
+      <form action="#" method="post">
+        <div class="row">
+          <div class="medium-6 columns">
+            <label for="name">Item Name:
+              <input type="text" placeholder="Enter text....."
+                     name="item_name">
+            </label>
+          </div>
         </div>
-      </div>
+        <div class="row">
+          <div class="medium-6 columns">
+            <label for="description">
+              Enter description of the item:
+              <textarea placeholder="Enter text....."
+                        name="description" rows="4"></textarea>
+            </label>
+            <div class="input-group-button">
+              <input type="submit" class="button" value="Submit" id="submit">
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
-  </form>
-
+  </div>
 
 {% endblock %}

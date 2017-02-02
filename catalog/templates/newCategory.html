@@ -2,28 +2,30 @@
 {% block title %}Add New Category{% endblock %}
 
 {% block content %}
-
-  <div class="row">
-    <div class="medium-6 columns">
-      <h1>Add New Category</h1>
-    </div>
-  </div>
-
-
-  <form action="#" method="post">
-    <div class="row">
-      <div class="medium-6 columns">
-        <label for="name">Name:
-          <input type="text" placeholder="Enter text....."
-                 name="category_name">
-        </label>
-        <div class="input-group-button">
-          <input type="submit" class="button" value="Submit" id="submit">
+  <div class="site-container">
+    <div class="site-content">
+      <div class="row">
+        <div class="medium-6 columns">
+          <h1>Add New Category</h1>
         </div>
       </div>
-    </div>
-  </form>
 
+
+      <form action="#" method="post">
+        <div class="row">
+          <div class="medium-6 columns">
+            <label for="name">Name:
+              <input type="text" placeholder="Enter text....."
+                     name="category_name">
+            </label>
+            <div class="input-group-button">
+              <input type="submit" class="button" value="Submit" id="submit">
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}
 
 

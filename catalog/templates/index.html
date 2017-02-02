@@ -6,33 +6,40 @@
   <div class="row">
     <div class="large-12 columns">
 
-      <a href="{{ url_for('new_category') }}" class="button">Create
-                                                             Category</a>
+      <a href="{{ url_for('new_category') }}" class="create button">Create
+                                                                    Category</a>
     </div>
   </div>
 
-  <div class="row">
-    <div class="large-6 columns">
-      <h2>Categories:</h2>
-      {% for c in categories %}
-        <h3>
-          <a href="{{ url_for('category_index', category_name = c.name) }}">
-            {{ c.name }}</a>
-        </h3>
-      {% endfor %}
-    </div>
+  <div class="site-container">
+    <div class="site-content">
+      <div class="row">
+        <div class="large-6 columns">
+          <h1 style="font-weight: bolder;">Categories:</h1>
+          {% for c in categories %}
+            <h3>
+              <a href="{{ url_for('category_index', category_name = c.name) }}">
+                {{ c.name }}</a>
+            </h3>
+          {% endfor %}
+        </div>
 
-    <div class="large-6 columns">
-      <h2 style="padding-top: 7px">Recent Items:</h2>
-      {% for i in items %}
-        <h4>
-          <a href="{{ url_for('item_description',
+
+        <div class="large-6 columns">
+          <h1 style="padding-top: 7px; font-weight: bolder;">Recent
+                                                             Items:</h>
+            {% for i in items %}
+              <h4>
+                <a href="{{ url_for('item_description',
           item_name = i.name, category_name = i.category.name) }}">
-            {{ i.name }}</a>
-          <span style="font-style: italic; font-size: medium">({{ i.category.name }})</span>
-        </h4>
-      {% endfor %}
+                  {{ i.name }}</a>
+                <span style="color: ghostwhite; font-style: italic; font-size:
+                medium">
+                  ({{ i.category.name }})</span>
+              </h4>
+            {% endfor %}
+        </div>
+      </div>
     </div>
   </div>
-
 {% endblock %}

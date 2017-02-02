@@ -29,6 +29,7 @@ session = DBSession()
 # Create anti-forgery state token
 @app.route('/login')
 def showLogin():
+    """Redirects the user to the Google login page."""
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
@@ -39,6 +40,7 @@ def showLogin():
 @app.route('/')
 @app.route('/index')
 def show_all():
+    """Lists the items which were recently created in descending order."""
     categories = session.query(Category).order_by(asc(Category.name))
     items = session.query(Item).order_by((desc(Item.id)))
     if 'username' not in login_session:
@@ -53,6 +55,7 @@ def show_all():
 
 @app.route('/category/<category_name>/items')
 def category_index(category_name):
+    """Lists all items of the specified category."""
     category = session.query(Category).filter_by(name=category_name).one()
     items = session.query(Item).filter_by(category=category).all()
     return render_template('category_index.html', category=category,
@@ -62,6 +65,7 @@ def category_index(category_name):
 
 @app.route('/category/new', methods=['GET', 'POST'])
 def new_category():
+    """Create a new category."""
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
@@ -77,10 +81,11 @@ def new_category():
             'username'], picture=login_session['picture'])
 
 
-@app.route('/category/<int:category_id>/edit/', methods=['GET', 'POST'])
-def edit_category(category_id):
+@app.route('/category/<category_name>/edit/', methods=['GET', 'POST'])
+def edit_category(category_name):
+    """Edit category with specified name."""
     editedCategory = session.query(
-        Category).filter_by(id=category_id).one()
+        Category).filter_by(name=category_name).one()
     if 'username' not in login_session:
         return redirect('/login')
     if editedCategory.user_id != login_session['user_id']:
@@ -103,6 +108,7 @@ def edit_category(category_id):
 
 @app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
 def delete_category(category_id):
+    """Edit category with specified ID."""
     delete_items = session.query(Item).filter_by(category_id=category_id).all()
     delete_category = session.query(
         Category).filter_by(id=category_id).one()
@@ -110,7 +116,8 @@ def delete_category(category_id):
         return redirect('/login')
     if delete_category.user_id != login_session['user_id']:
         flash(
-            "You are not authorized to delete this category. Please create your own category in order to edit")
+            "You are not authorized to delete this category. Please create "
+            "your own category in order to edit/delete!")
         return redirect(url_for('show_all'))
     if request.method == 'POST':
         for i in delete_items:
@@ -122,11 +129,15 @@ def delete_category(category_id):
         return redirect(url_for('show_all'))
     else:
         return render_template('deleteCategory.html',
-                               category=delete_category)
+                               category=delete_category,
+                               user_name=login_session[
+                                   'username'],
+                               picture=login_session['picture'])
 
 
 @app.route('/category/<int:category_id>/item/new', methods=['GET', 'POST'])
 def new_item(category_id):
+    """Creates a new item."""
     if 'username' not in login_session:
         flash("You must be logged in to add an item to a category!")
         return redirect('/login')
@@ -151,6 +162,7 @@ def new_item(category_id):
 
 @app.route('/category/<category_name>/<item_name>')
 def item_description(category_name, item_name):
+    """Shows the details of the specified item."""
     item = session.query(Item).filter_by(name=item_name).one()
     category = session.query(Category).filter_by(name=category_name).one()
     return render_template('itemDescription.html', item=item,
@@ -162,6 +174,7 @@ def item_description(category_name, item_name):
 @app.route('/category/<category_name>/<item_name>/edit',
            methods=['GET', 'POST'])
 def edit_item(category_name, item_name):
+    """Edit the item with the given name."""
     if 'username' not in login_session:
         return redirect('/login')
     editedItem = session.query(Item).filter_by(name=item_name).one()
@@ -188,6 +201,7 @@ def edit_item(category_name, item_name):
 @app.route('/category/<category_name>/<item_name>/delete',
            methods=['GET', 'POST'])
 def delete_item(category_name, item_name):
+    """Delete the item with the given name."""
     if 'username' not in login_session:
         return redirect('/login')
     deleteItem = session.query(Item).filter_by(name=item_name).one()
@@ -209,11 +223,24 @@ def delete_item(category_name, item_name):
 
 
 #####################
+#  JSON Endpoint    #
+#####################
+
+@app.route('/category/<category_name>/JSON')
+def categoryJSON(category_name):
+    """Returns the catalog in JSON notation."""
+    category = session.query(Category).filter_by(name=category_name).one()
+    items = session.query(Item).filter_by(category=category).all()
+    return jsonify(Items=[i.serialize for i in items])
+
+
+#####################
 #  GOOGLE Sign In   #
 #####################
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    """Login authentication with Google"""
     # Validate state token
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter.'), 401)
