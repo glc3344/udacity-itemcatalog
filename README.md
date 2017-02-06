@@ -17,7 +17,7 @@ $ vagrant up
 $ vagrant ssh
 ```
 
-When the virtual machine is done booting up change to the shared directory by running the following commands:
+When the virtual machine is done booting and your are logegd in, change to the shared directory and start the server by running the following commands:
 
 ```bash
 $ cd /vagrant/catalog
